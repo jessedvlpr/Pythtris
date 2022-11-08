@@ -1,16 +1,20 @@
 import time
 import pygame as pg
 
-(width, height) = (400, 600)
 
-screen = pg.display.set_mode((width, height))
+def new_window():
+    (width, height) = (400, 600)
 
-pg.display.flip()
+    screen = pg.display.set_mode((width, height))
 
-running = True
+    pg.display.flip()
 
-while running:
-    time.sleep(1/60)
-    for event in pg.event.get():
-        if event.type == pg.quit:
-            running = False
+    running = True
+
+    while running:
+        time.sleep(1/60)
+        for event in pg.event.get():
+            if event.type == pg.display.quit:
+                running = False
+    pg.display.quit()
+    pg.quit()
