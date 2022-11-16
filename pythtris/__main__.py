@@ -15,7 +15,7 @@ frame = 0
 shape_key = random.choice(list(constants.shapes.keys()))
 up_next_key = random.choice(list(constants.shapes.keys()))
 
-shape = constants.shapes[shape_key]
+shape = constants.shapes[shape_key].copy()
 
 shape_width = len(shape[0]) - 1
 shape_height = len(shape) - 1
@@ -76,7 +76,7 @@ while running:
             shape_key = up_next_key
             up_next_key = random.choice(list(constants.shapes.keys()))
 
-            shape = constants.shapes[shape_key]
+            shape = constants.shapes[shape_key].copy()
 
             shape_width = len(shape[0]) - 1
             shape_height = len(shape) - 1
@@ -115,7 +115,7 @@ while running:
                                                         j] = constants.values[shape_key]
 
             if event.key == pygame.K_a:
-                if pos_x + shape_width < 9 and pos_x + shape_height < 9 and pos_x > 0:
+                if pos_x + shape_width <= 9 and pos_x + shape_height <= 9 and pos_x >= 0:
                     for i, n in enumerate(shape):
                         for j, m in enumerate(n):
                             if m:
@@ -138,7 +138,7 @@ while running:
                                                         j] = constants.values[shape_key]
 
             if event.key == pygame.K_d:
-                if pos_x + shape_width < 9 and pos_x + shape_height < 9 and pos_x > 0:
+                if pos_x + shape_width <= 9 and pos_x + shape_height <= 9 and pos_x >= 0:
                     for i, n in enumerate(shape):
                         for j, m in enumerate(n):
                             if m:
