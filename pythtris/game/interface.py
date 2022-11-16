@@ -3,12 +3,12 @@ import random
 from common import constants
 
 
-outer_line_color = (255, 255, 255)
-inner_line_color = (127, 127, 127)
-
-
-def visualize_board(board: 'Board', shape: str, x: int = 0, y: int = 0, scale: float = 1):
+def visualize_board(board: 'Board', shape: str, up_next: str, x: int = 0, y: int = 0, scale: float = 1):
     surface = pygame.display.get_surface()
+
+    outer_line_color = (255, 255, 255)
+    inner_line_color = (127, 127, 127)
+
     top_left = (x, y)
     box_size = 30 * scale
     font = pygame.font.SysFont(None, 32)
@@ -30,7 +30,7 @@ def visualize_board(board: 'Board', shape: str, x: int = 0, y: int = 0, scale: f
     score_rect.top = top_left[1] + 40
 
     next_rect.left = top_left[0]
-    next_rect.top = top_left[1] + 70
+    next_rect.top = top_left[1] + 100
 
     surface.blit(level_text, level_rect)
     surface.blit(score_text, score_rect)
@@ -38,15 +38,24 @@ def visualize_board(board: 'Board', shape: str, x: int = 0, y: int = 0, scale: f
 
     for i in range(3):
         for j in range(4):
-            pygame.draw.rect(surface, constants.colors[shape],
-                             (top_left[0] + box_size * i,
-                              top_left[1] + 110 + box_size * j,
-                              box_size + 1, box_size + 1), 1)
+            try:
+                if constants.shapes[up_next][j][i]:
+                    pygame.draw.rect(surface, constants.colors[up_next],
+                                     (top_left[0] + box_size * i,
+                                     top_left[1] + 130 + box_size * j,
+                                     box_size + 1, box_size + 1), 0)
+                else:
+                    [][-1]  # hacky solution to trigger IndexError
+            except IndexError:
+                pygame.draw.rect(surface, inner_line_color,
+                                 (top_left[0] + box_size * i,
+                                  top_left[1] + 130 + box_size * j,
+                                  box_size + 1, box_size + 1), 1)
 
     pygame.draw.rect(surface,
                      outer_line_color,
                      (top_left[0],
-                      top_left[1] + 110,
+                      top_left[1] + 130,
                       box_size * 3, box_size * 4), 2)
 
     offset_x = top_left[1]

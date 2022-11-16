@@ -13,6 +13,7 @@ framerate = 24
 frame = 0
 
 shape = random.choice(list(constants.shapes.keys()))
+up_next = random.choice(list(constants.shapes.keys()))
 shape_width = len(constants.shapes[shape][0]) - 1
 shape_height = len(constants.shapes[shape]) - 1
 
@@ -26,8 +27,8 @@ while running:
     time.sleep(1/framerate)
     frame += 1
     screen.fill(0)
-    interface.visualize_board(board, shape, 30, 5, 1.15)
-    if frame >= framerate/2+board.level:
+    interface.visualize_board(board, shape, up_next, 30, 5, 1.15)
+    if frame >= framerate/(2 + board.level):
         able = True
         if pos_y + shape_height < board.height - 1:
             for i, n in enumerate(constants.shapes[shape]):
@@ -69,7 +70,8 @@ while running:
             if line_count == 4:
                 board.score += 1200 * (board.level + 1)
 
-            shape = random.choice(list(constants.shapes.keys()))
+            shape = up_next
+            up_next = random.choice(list(constants.shapes.keys()))
 
             shape_width = len(constants.shapes[shape][0]) - 1
             shape_height = len(constants.shapes[shape]) - 1
