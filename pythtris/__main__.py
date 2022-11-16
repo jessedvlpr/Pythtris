@@ -42,16 +42,9 @@ while running:
             for i, n in enumerate(shape):
                 for j, m in enumerate(n):
                     if m:
-                        if board.spaces[pos_y + i][pos_x + j] != 0:
-                            able = False
-                            break
                         board.spaces[pos_y + i][pos_x +
                                                 j] = constants.values[shape_key]
-                if not able:
-                    break
         else:
-            able = False
-        if not able:
             line_count = 0
             for i in range(len(board.spaces)):
                 if not (0 in board.spaces[i]):
