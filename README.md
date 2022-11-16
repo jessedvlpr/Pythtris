@@ -16,6 +16,10 @@ To run the code, go into Windows Command Prompt, then run the command:
 
 ## References:
 
+https://www.python.org/
+
+https://www.pygame.org/
+
 https://dev.to/codemouse92/dead-simple-python-project-structure-and-imports-38c6
 
 https://github.com/github/gitignore/blob/main/Python.gitignore
