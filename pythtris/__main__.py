@@ -27,7 +27,7 @@ while running:
     frame += 1
     screen.fill(0)
     interface.visualize_board(board, shape, 30, 5, 1.15)
-    if frame >= framerate/10:
+    if frame >= framerate/2+board.level:
         able = True
         if pos_y + shape_height < board.height - 1:
             for i, n in enumerate(constants.shapes[shape]):
