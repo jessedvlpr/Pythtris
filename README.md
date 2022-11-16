@@ -8,6 +8,12 @@ To install Pygame, you must have Python installed, then in Windows Command Promp
 
 The code should then compile successfully, enjoy Pythtris!
 
+To run the code, go into Windows Command Prompt, then run the command:
+
+'py {Path-to-Code}/pythtris-git/pythtris'
+
+(Path-to-Code is usually something like 'C:/Users/JohnDoe/Documents')
+
 ## References:
 
 https://dev.to/codemouse92/dead-simple-python-project-structure-and-imports-38c6
