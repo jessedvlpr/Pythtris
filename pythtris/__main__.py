@@ -137,12 +137,26 @@ while running:
                                                     j] = constants.values[shape_key]
 
             if event.key == pygame.K_d:
-                temp = shape.copy()
                 for i, n in enumerate(shape):
                     for j, m in enumerate(n):
-                        pass
+                        if m:
+                            board.spaces[pos_y + i][pos_x + j] = 0
+                temp = shape.copy()
+                shape.clear()
+                for i in range(len(temp[0])):
+                    shape.append([])
+                    for j in range(len(temp)):
+                        if temp[j][i]:
+                            shape[i].append(1)
+                        else:
+                            shape[i].append(0)
                 shape_width = len(shape[0]) - 1
                 shape_height = len(shape) - 1
+                for i, n in enumerate(shape):
+                    for j, m in enumerate(n):
+                        if m:
+                            board.spaces[pos_y + i][pos_x +
+                                                    j] = constants.values[shape_key]
 
             if event.key == pygame.K_ESCAPE:
                 running = False
