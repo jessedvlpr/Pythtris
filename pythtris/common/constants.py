@@ -1,3 +1,5 @@
+# dictionary holding lists of either 1 or 0, 1 being a filled block, 0 being an empty space
+# the number of lists is the height of the space, and the number of integers in each list is the width
 shapes = {
     'St':   [
         [1],
@@ -24,13 +26,15 @@ shapes = {
     'L':    [
         [1, 0],
         [1, 0],
-        [1, 1]],
+        [1, 1]
+    ],
     'J':    [
         [0, 1],
         [0, 1],
         [1, 1]
     ]
 }
+# dictionary holding the values of each shape, the value will be held by the space on the board
 values = {
     'St':   100,
     'Sk':   200,
@@ -40,6 +44,7 @@ values = {
     'L':    600,
     'J':    700
 }
+# dictionary holding the color values for each shape
 colors = {
     'St':   (255, 255, 255),
     'Sk':   (255, 64, 64),
