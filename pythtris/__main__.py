@@ -182,7 +182,10 @@ while running:
             if event.key == pygame.K_a:
 
                 # checks if the shape is within the confines of the board
-                if pos_x + shape_width <= 9 and pos_x + shape_height <= 9 and pos_x >= 0:
+                if pos_x + shape_width <= board.width - 1 \
+                    and pos_x + shape_height <= board.width - 1 \
+                    and pos_x >= 0 and pos_y + shape_width < board.height \
+                        and pos_y + shape_height <= board.height:
 
                     # 1st for loop: removes the shape from it's previous position
                     for i, n in enumerate(shape):
@@ -226,7 +229,10 @@ while running:
             if event.key == pygame.K_d:
 
                 # checks if the shape is within the confines of the board
-                if pos_x + shape_width <= 9 and pos_x + shape_height <= 9 and pos_x >= 0:
+                if pos_x + shape_width <= board.width - 1 \
+                    and pos_x + shape_height <= board.width - 1 \
+                    and pos_x >= 0 and pos_y + shape_width < board.height \
+                        and pos_y + shape_height <= board.height:
 
                     # 1st for loop: removes the shape from it's previous position
                     for i, n in enumerate(shape):
