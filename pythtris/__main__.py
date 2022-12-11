@@ -17,7 +17,7 @@ framerate = 24
 # variable for counting how many frames have passed
 frame = 0
 # variable for how fast the shapes drop down the screen
-drop_speed = 2
+drop_speed = 10
 
 # variable holding the dict key of a random shape from the shapes dictionary
 shape_key = random.choice(list(constants.shapes.keys()))
@@ -59,8 +59,31 @@ while running:
     # this causes the shapes to fall down the screen less frequently than the screen updates
     # as well, it increases the speed of the drops as level progresses
     if frame >= framerate/(drop_speed + board.level):
+        collision = False
         # checks if the shape is within the play area / if it is too far down the screen to drop any more
-        if pos_y + shape_height < board.height - 1:
+        if not pos_y + shape_height < board.height - 1:
+            collision = True
+        # trys for index error
+        try:
+            # loops through the shape's dictionary
+            for i, n in enumerate(shape):
+                for j, m in enumerate(n):
+                    if m:
+                        # checks if the upcoming space on the board is non-zero (occupied) and
+                        # if the checked upcoming space is part of the current shape
+                        # triggers the index error if the shape[i + 1] space does not exist
+                        if board.spaces[pos_y + i + 1][pos_x + j] != 0 and \
+                                shape[i + 1][j] == 0:
+                            # if the conditions were met, a collision occurs and breaks out of inner loop
+                            collision = True
+                            break
+                # break out of outer loop
+                if collision:
+                    break
+        except IndexError:
+            # if the shape index error is triggered, assume it is a collision
+            collision = True
+        if not collision:
             # 1st for loop: this loop cycles through the shape's dictionary, checking what spaces are supposed
             # to be filled, then causes that space on the board to update it's value to 0
             # effectively clearing the last position of the shape
@@ -93,7 +116,7 @@ while running:
                     # loops through the rows above the cleared row, then moves them all down a position
                     for j in range(len(board.spaces) - (len(board.spaces) - i), 0, -1):
                         board.spaces[j] = board.spaces[j - 1].copy()
-            #
+            # checks if the number of cleared lines is enough to increase the level
             if board.cleared_lines >= board.level * 10 + 10:
                 # lowers the amount of lines cleared
                 board.cleared_lines = board.cleared_lines - \
@@ -103,15 +126,17 @@ while running:
             if line_count == 1:
                 board.score += 40 * (board.level + 1)
             # checks if the amount of lines cleared in the previous move was 2, increases score by 100 * (level+1)
-            if line_count == 2:
+            elif line_count == 2:
                 board.score += 100 * (board.level + 1)
             # checks if the amount of lines cleared in the previous move was 3, increases score by 300 * (level+1)
-            if line_count == 3:
+            elif line_count == 3:
                 board.score += 300 * (board.level + 1)
             # checks if the amount of lines cleared in the previous move was 4, increases score by 1200 * (level+1)
-            if line_count == 4:
+            elif line_count == 4:
                 board.score += 1200 * (board.level + 1)
-
+            # this should be impossible
+            else:
+                pass
             # sets current shape_key to the previously up_next key
             shape_key = up_next_key
             # assigns a new random shape_key to be up next
@@ -272,10 +297,10 @@ while running:
                                 board.spaces[pos_y + i][pos_x +
                                                         j] = constants.values[shape_key]
 
-            # checks if key-press event is the escape key
-            if event.key == pygame.K_ESCAPE:
-                # stops the while loop
-                running = False
+        # checks if event is quit
+        if event.type == pygame.QUIT:
+            # stops the while loop
+            running = False
 
 # quits and closes the window
 pygame.quit()
