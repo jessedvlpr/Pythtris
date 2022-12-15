@@ -3,6 +3,63 @@ import random
 from common import constants
 
 
+def open_pause():
+    # gets the surface of the currently displayed window
+    surface = pygame.display.get_surface()
+
+    # sets the values for the width and height
+    width = 300
+    height = 200
+
+    # sets the color for the menu border, white
+    border_color = (255, 255, 255)
+
+    inner_color = (0, 0, 0)
+
+    # sets the top left of the visualization to a tuple holding the specified x and y positions
+    top_left = (int(surface.get_width()/2) - int(width/2),
+                int(surface.get_height()/2) - height)
+
+    # sets the font of screen text to the default system font
+    font = pygame.font.SysFont(None, 40)
+
+    # renders 3 texts for paused, main menu, and close app displays
+    paused_text = font.render(
+        'Paused', False, (255, 255, 255))
+    menu_text = font.render(
+        'Exit to Main Menu', False, (255, 255, 255))
+    close_text = font.render('Exit to Desktop', False, (255, 255, 255))
+
+    # gets the rect bounds for each text, for the ability to mutate the positions and such
+    paused_rect = paused_text.get_rect()
+    menu_rect = menu_text.get_rect()
+    close_rect = close_text.get_rect()
+
+    # changes the position of each of the texts to their appropriate spots on screen
+    paused_rect.left = top_left[0] + int(width/2) - int(paused_rect.width/2)
+    paused_rect.top = top_left[1] + 20
+
+    menu_rect.left = top_left[0] + int(width/2) - int(menu_rect.width/2)
+    menu_rect.top = top_left[1] + 80
+
+    close_rect.left = top_left[0] + int(width/2) - int(close_rect.width/2)
+    close_rect.top = top_left[1] + 120
+
+    pygame.draw.rect(surface, inner_color,
+                     (top_left[0], top_left[1], width, height), 0)
+
+    pygame.draw.rect(surface, border_color,
+                     (top_left[0]+1, top_left[1]+1, width-2, height-2), 1)
+
+    # adds the text to the surface
+    surface.blit(paused_text, paused_rect)
+    surface.blit(menu_text, menu_rect)
+    surface.blit(close_text, close_rect)
+
+    # sends the updated info to the screen
+    pygame.display.flip()
+
+
 def visualize_board(board: 'Board', shape: str, up_next: str, x: int = 0, y: int = 0, scale: float = 1):
     # gets the surface of the currently displayed window
     surface = pygame.display.get_surface()
@@ -47,9 +104,9 @@ def visualize_board(board: 'Board', shape: str, up_next: str, x: int = 0, y: int
     surface.blit(score_text, score_rect)
     surface.blit(next_text, next_rect)
 
-    # creates a 3x4 box to hold the up_next shape
-    for i in range(3):
-        for j in range(4):
+    # creates a 4x3 box to hold the up_next shape
+    for i in range(4):
+        for j in range(3):
             # try is for checking if the shape's dimensions fall out of the bounds of the for loops
             try:
                 # if the spot lining up with i and j is not a 0 in the shape, then fill the relative box
@@ -74,7 +131,7 @@ def visualize_board(board: 'Board', shape: str, up_next: str, x: int = 0, y: int
                      outer_line_color,
                      (top_left[0],
                       top_left[1] + 130,
-                      box_size * 3, box_size * 4), 2)
+                      box_size * 4, box_size * 3), 2)
 
     # sets the y-offset to the provided y position
     offset_y = top_left[1]
@@ -84,7 +141,7 @@ def visualize_board(board: 'Board', shape: str, up_next: str, x: int = 0, y: int
         # executes code only after the 3rd row is passed
         if i >= 4:
             # sets the x-offset to the provided x position, plus a boundary given for the left-most ui
-            offset_x = top_left[0] + 120
+            offset_x = top_left[0] + 170
 
             # loops through the board objects width
             for j in range(board.width):
@@ -112,7 +169,7 @@ def visualize_board(board: 'Board', shape: str, up_next: str, x: int = 0, y: int
     # creates a border around the 10x20 board
     pygame.draw.rect(surface,
                      outer_line_color,
-                     (top_left[0] + 120,
+                     (top_left[0] + 170,
                          top_left[1],
                          board.width * box_size + 1,
                          (board.height - 4) * box_size + 1), 2)
