@@ -1,6 +1,71 @@
 import pygame
 import random
+import shelve
 from common import constants
+
+
+def open_lose(username: list[str]):
+    # gets the surface of the currently displayed window
+    surface = pygame.display.get_surface()
+
+    # sets the values for the width and height
+    width = 300
+    height = 200
+
+    # sets the color for the menu border, white
+    border_color = (255, 255, 255)
+
+    inner_color = (0, 0, 0)
+
+    # sets the top left of the visualization to a tuple holding the specified x and y positions
+    top_left = (int(surface.get_width()/2) - int(width/2),
+                int(surface.get_height()/2) - height)
+
+    # sets the font of screen text to the default system font
+    font = pygame.font.SysFont(None, 40)
+    font_small = pygame.font.SysFont(None, 26)
+
+    pygame.draw.rect(surface, inner_color,
+                     (top_left[0], top_left[1], width, height), 0)
+
+    pygame.draw.rect(surface, border_color,
+                     (top_left[0]+1, top_left[1]+1, width-2, height-2), 1)
+
+    over_text = font.render(
+        'Game Over', True, (255, 255, 255))
+
+    over_rect = over_text.get_rect()
+
+    over_rect.left = top_left[0] + int(width/2) - int(over_rect.width/2)
+    over_rect.top = top_left[1] + 30
+
+    surface.blit(over_text, over_rect)
+
+    hint_text = font_small.render(
+        'Enter Username, Press Enter', True, (255, 255, 255))
+
+    hint_rect = hint_text.get_rect()
+
+    hint_rect.left = top_left[0] + int(width/2) - int(hint_rect.width/2)
+    hint_rect.top = top_left[1] + 80
+
+    surface.blit(hint_text, hint_rect)
+
+    for i in range(4):
+        pygame.draw.line(surface, border_color,
+                         (35 + top_left[0] + 60 * i+1, top_left[1] + 170),
+                         ((35 + top_left[0] + 60 * i+1) + 40, top_left[1] + 170), 5)
+        try:
+            l = username[i].upper()
+            letter_text = font.render(l, True, border_color)
+            letter_rect = letter_text.get_rect()
+            letter_rect.left = 45 + top_left[0] + 60 * i+1
+            letter_rect.top = top_left[1] + 130
+            surface.blit(letter_text, letter_rect)
+        except:
+            pass
+    # sends the updated info to the screen
+    pygame.display.flip()
 
 
 def open_pause(button: str = 'menu'):
@@ -25,10 +90,10 @@ def open_pause(button: str = 'menu'):
 
     # renders 3 texts for paused, main menu, and close app displays
     paused_text = font.render(
-        'Paused', False, (255, 255, 255))
+        'Paused', True, (255, 255, 255))
     menu_text = font.render(
-        'Exit to Main Menu', False, (255, 255, 255))
-    close_text = font.render('Exit to Desktop', False, (255, 255, 255))
+        'Exit to Main Menu', True, (255, 255, 255))
+    close_text = font.render('Exit to Desktop', True, (255, 255, 255))
 
     # gets the rect bounds for each text, for the ability to mutate the positions and such
     paused_rect = paused_text.get_rect()
@@ -83,13 +148,14 @@ def visualize_board(board: 'Board', shape: str, up_next: str, x: int = 0, y: int
 
     # sets the font of screen text to the default system font
     font = pygame.font.SysFont(None, 32)
+    font_small = pygame.font.SysFont(None, 24)
 
     # renders 3 texts for level, score, and up next displays
     level_text = font.render(
-        'Level: ' + str(board.level), False, (255, 255, 255))
+        'Level: ' + str(board.level), True, (255, 255, 255))
     score_text = font.render(
-        'Score: ' + str(board.score), False, (255, 255, 255))
-    next_text = font.render('Up Next: ', False, (255, 255, 255))
+        'Score: ' + str(board.score), True, (255, 255, 255))
+    next_text = font.render('Up Next: ', True, (255, 255, 255))
 
     # gets the rect bounds for each text, for the ability to mutate the positions and such
     level_rect = level_text.get_rect()
@@ -110,6 +176,36 @@ def visualize_board(board: 'Board', shape: str, up_next: str, x: int = 0, y: int
     surface.blit(level_text, level_rect)
     surface.blit(score_text, score_rect)
     surface.blit(next_text, next_rect)
+
+    top_text = font.render(
+        'Top 10 Scores', True, (255, 255, 255))
+
+    top_rect = top_text.get_rect()
+
+    top_rect.left = top_left[0]
+    top_rect.top = top_left[1] + 280
+
+    surface.blit(top_text, top_rect)
+
+    scores = shelve.open('pythtris/data/score')
+    temp = sorted(list(scores.items()), key=lambda x: x[1], reverse=True)
+
+    for i in range(10):
+        try:
+            usr = temp[i][0]
+            usr_scr = scores.get(usr)
+        except:
+            usr = ''
+            usr_scr = ''
+        top10_text = font_small.render(
+            '(' + str(i+1) + ') ' + usr + ' : ' + usr_scr, True, (255, 255, 255))
+
+        top10_rect = top10_text.get_rect()
+
+        top10_rect.left = top_left[0]
+        top10_rect.top = top_left[1] + 320 + i*30
+
+        surface.blit(top10_text, top10_rect)
 
     # creates a 4x3 box to hold the up_next shape
     for i in range(4):
@@ -148,7 +244,7 @@ def visualize_board(board: 'Board', shape: str, up_next: str, x: int = 0, y: int
         # executes code only after the 3rd row is passed
         if i >= 4:
             # sets the x-offset to the provided x position, plus a boundary given for the left-most ui
-            offset_x = top_left[0] + 170
+            offset_x = top_left[0] + 200
 
             # loops through the board objects width
             for j in range(board.width):
@@ -176,7 +272,7 @@ def visualize_board(board: 'Board', shape: str, up_next: str, x: int = 0, y: int
     # creates a border around the 10x20 board
     pygame.draw.rect(surface,
                      outer_line_color,
-                     (top_left[0] + 170,
+                     (top_left[0] + 200,
                          top_left[1],
                          board.width * box_size + 1,
                          (board.height - 4) * box_size + 1), 2)
