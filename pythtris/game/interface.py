@@ -3,7 +3,7 @@ import random
 from common import constants
 
 
-def open_pause():
+def open_pause(button: str = 'menu'):
     # gets the surface of the currently displayed window
     surface = pygame.display.get_surface()
 
@@ -55,6 +55,13 @@ def open_pause():
     surface.blit(paused_text, paused_rect)
     surface.blit(menu_text, menu_rect)
     surface.blit(close_text, close_rect)
+
+    if button == 'menu':
+        pygame.draw.rect(surface, border_color,
+                         (menu_rect.left-5, menu_rect.top-5, menu_rect.width+10, menu_rect.height+10), 3)
+    elif button == 'close':
+        pygame.draw.rect(surface, border_color,
+                         (close_rect.left-5, close_rect.top-5, close_rect.width+10, close_rect.height+10), 3)
 
     # sends the updated info to the screen
     pygame.display.flip()
