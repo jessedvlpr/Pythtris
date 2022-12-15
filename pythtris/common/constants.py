@@ -2,10 +2,7 @@
 # the number of lists is the height of the space, and the number of integers in each list is the width
 shapes = {
     'St':   [
-        [1],
-        [1],
-        [1],
-        [1]
+        [1, 1, 1, 1]
     ],
     'Sk':   [
         [0, 1, 1],
