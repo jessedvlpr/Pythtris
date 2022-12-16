@@ -123,97 +123,61 @@ def move_shape(dir: str = 'down/horiz', val: int = 1):
 
 # function to hold the code that rotates the shape
 def rotate(dir: str = 'cw/ccw'):
-    global shape_height, shape_width, pos_x, pos_y, rotations
+    global shape_height, shape_width, pos_x, pos_y, rotations, shape
     if dir.lower() == 'cw':
-        # 1st for loop: removes the shape from it's previous position
-        for i, n in enumerate(shape):
-            for j, m in enumerate(n):
-                if m:
-                    board.spaces[pos_y + i][pos_x + j] = 0
-
-        # creates temporary variable to hold a copy of the shape
-        temp = shape.copy()
-        # removes the values from the shape list
-        shape.clear()
-
-        # below for loop is effectively swapping the shape's height and width with each-other
-        # as well as the values held in the positions of height and width
-
-        # cycles through the temp variable's width
-        for i in range(len(temp[0])):
-            # appends a new list to the height
-            shape.append([])
-
-            # cycles through the temp variable's height
-            for j in range(len(temp)):
-                # appends a value to the width
-                if temp[j][i]:
-                    shape[i].append(1)
-                else:
-                    shape[i].append(0)
-
-        # resets width and height to match the new rotated shape
-        shape_width = len(shape[0])
-        shape_height = len(shape)
-
-        # replaces the shape at it's new position
-        for i, n in enumerate(shape):
-            for j, m in enumerate(n):
-                if m:
-                    board.spaces[pos_y + i][pos_x +
-                                            j] = constants.values[shape_key]
-    elif dir.lower() == 'ccw':
-        # increments number of rotations performed
         rotations += 1
-        # 1st for loop: removes the shape from it's previous position
-        for i, n in enumerate(shape):
-            for j, m in enumerate(n):
-                if m:
-                    board.spaces[pos_y + i][pos_x + j] = 0
-
-        # creates temporary variable to hold a copy of the shape
-        temp = shape.copy()
-        # removes the values from the shape list
-        shape.clear()
-
-        # below for loop is effectively swapping the shape's height and width with each-other
-        # as well as the values held in the positions of height and width
-
-        # cycles through the temp variable's width
-        for i in range(len(temp[0])):
-            # appends a new list to the height
-            shape.append([])
-
-            # cycles through the temp variable's height
-            for j in range(len(temp)):
-                # appends a value to the width
-                if temp[j][i]:
-                    shape[i].append(1)
-                else:
-                    shape[i].append(0)
-
-        # resets width and height to match the new rotated shape
-        shape_width = len(shape[0])
-        shape_height = len(shape)
-
-        if rotations % 4 == 0:
-            pass
-        elif rotations % 4 == 1:
-            pass
-        elif rotations % 4 == 2:
-            pass
-        elif rotations % 4 == 3:
-            pass
-
-        # replaces the shape at it's new position
-        for i, n in enumerate(shape):
-            for j, m in enumerate(n):
-                if m:
-                    board.spaces[pos_y + i][pos_x +
-                                            j] = constants.values[shape_key]
-
+    elif dir.lower() == 'ccw':
+        rotations += 3
     else:
         raise Exception('Please specify a rotational direction, cw/ccw')
+
+    # 1st for loop: removes the shape from it's previous position
+    for i, n in enumerate(shape):
+        for j, m in enumerate(n):
+            if m:
+                board.spaces[pos_y + i][pos_x + j] = 0
+
+    # creates temporary variable to hold a copy of the shape
+    temp = shape.copy()
+    # removes the values from the shape list
+    shape.clear()
+
+    if rotations % 4 == 0:
+        shape = constants.shapes[shape_key].copy()
+    elif rotations % 4 == 1:
+        for i in range(len(temp[0])):
+            shape.append([])
+            for j in range(len(temp)):
+                if temp[j][i]:
+                    shape[i].append(constants.values[shape_key])
+                else:
+                    shape[i].append(0)
+    elif rotations % 4 == 2:
+        shape = constants.shapes[shape_key].copy()
+        rev_shape = list(reversed(constants.shapes[shape_key].copy()))
+        for i in range(len(shape)):
+            shape[i] = list(reversed(rev_shape[i].copy()))
+    elif rotations % 4 == 3:
+        for i in range(len(temp[0])):
+            shape.append([])
+            for j in range(len(temp)):
+                if temp[j][i]:
+                    shape[i].append(constants.values[shape_key])
+                else:
+                    shape[i].append(0)
+        rev_shape = list(reversed(shape))
+        for i in range(len(shape)):
+            shape[i] = list(reversed(rev_shape[i]))
+    # resets width and height to match the new rotated shape
+    shape_width = len(shape[0])
+    shape_height = len(shape)
+
+    # replaces the shape at it's new position
+    for i, n in enumerate(shape):
+        for j, m in enumerate(n):
+            if m:
+                board.spaces[pos_y + i][pos_x +
+                                        j] = constants.values[shape_key]
 
 
 # framerate for how many times the screen should update per second
